@@ -1,0 +1,48 @@
+local
+node:fs:562
+  return binding.open(
+                 ^
+
+Error: EACCES: permission denied, open '/etc/letsencrypt/live/relex.ip-ddns.com/privkey.pem'
+    at Object.openSync (node:fs:562:18)
+    at Object.readFileSync (node:fs:446:35)
+    at Object.<anonymous> (/home/surface/app/server.js:21:14)
+    at Module._compile (node:internal/modules/cjs/loader:1562:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1699:10)
+    at Module.load (node:internal/modules/cjs/loader:1313:32)
+    at Module._load (node:internal/modules/cjs/loader:1123:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:217:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/letsencrypt/live/relex.ip-ddns.com/privkey.pem'
+}
+
+Node.js v22.13.0
+local
+node:fs:562
+  return binding.open(
+                 ^
+
+Error: EACCES: permission denied, open '/etc/letsencrypt/live/relex.ip-ddns.com/privkey.pem'
+    at Object.openSync (node:fs:562:18)
+    at Object.readFileSync (node:fs:446:35)
+    at Object.<anonymous> (/home/surface/app/server.js:21:14)
+    at Module._compile (node:internal/modules/cjs/loader:1562:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1699:10)
+    at Module.load (node:internal/modules/cjs/loader:1313:32)
+    at Module._load (node:internal/modules/cjs/loader:1123:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:217:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+    at node:internal/main/run_main_module:36:49 {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/letsencrypt/live/relex.ip-ddns.com/privkey.pem'
+}
+
+Node.js v22.13.0
