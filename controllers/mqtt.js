@@ -37,8 +37,6 @@ async function startMqtt() {
                 try {
                     data = base64ToObject(`"${message}"`);
                 } catch (e) {
-                    console.log("base646464646464646464");
-
                     console.log(e);
                     return;
                 }
@@ -58,17 +56,12 @@ async function startMqtt() {
         console.error('Error in MQTT operation:', error);
     }
 
-    // Cleanup / disconnect the client when needed
-    // Uncomment to disconnect after 10 seconds for cleanup
-    // setTimeout(async () => {
-    //     await mqttClient.disconnect();
-    // }, 10000);
 
 }
 
 function handleMqttReport(message) {
 
-    const { event, op, ain, temps,  mac, sets, oSt, iSt, sig, tims, progs, status, pwm } = message;
+    const { event, op, ain, temps,  mac, sets, oSt, iSt, sig, tims, progs, status, pwm ,a_labels,o_labels,i_labels,index} = message;
     console.log(`message: ${JSON.stringify(message)}`);
 
     ////////////////////////////////////////////////
@@ -79,8 +72,6 @@ function handleMqttReport(message) {
 
             ...(ain != null && { analog: `${[Number(ain[0]) , Number(ain[1])]}` }),
             ...(temps != null && { temps: `${[Number(temps[0].toFixed(2)) , Number(temps[1]).toFixed(2),Number(temps[2]).toFixed(2)]}` }),
-            // ...(temp1 != null && { temp1: Number(temp1.toFixed(2)) }),
-            // ...(temp2 != null && { temp2: Number(temp2.toFixed(2)) }),
             ...(sig != null && { signalQ: Number(sig) }),
             ...(sets != null && { setting: sets }),
             ...(oSt != null && { outStates: oSt }),
@@ -143,10 +134,6 @@ function handleMqttReport(message) {
         data['connected'] = Math.round(Date.now() / 1000);
         data['analog'] = `${[Number(ain[0]), Number(ain[1])]}`;
        if(temps != null) data['temps']= `${[Number(temps[0].toFixed(2)) , Number(temps[1]).toFixed(2),Number(temps[2]).toFixed(2)]}` ;
-        // data['temp0'] = Number(temp0.toFixed(2));
-        // data['temp1'] = Number(temp1.toFixed(2));
-        // data['temp2'] = Number(temp2.toFixed(2));
-        // data.remove('temperature');
         console.log(`DATA LOG : ${JSON.stringify(data)}`);
         db.create('device_log', data).then((result) => {
             if (result) {
@@ -210,6 +197,33 @@ function handleMqttReport(message) {
         getStatusFromDb(message);
     } else if (event === 'update') {
         handleMqttMessage(message);
+
+    }else if (event === 'label') {
+        var data = {
+            ...(i_labels!=null && {i_labels : i_labels}),
+            ...(o_labels!=null && {o_labels : o_labels}),
+            ...(a_labels!=null && {a_labels : a_labels}),
+        };
+        console.log(`label data: ${JSON.stringify(data)}`);
+            try{
+                
+        db.update('devices', data, { mac }).then((result) => {
+            if (result) {
+                const topic = "sub" + ">" + mac;
+                // console.log(`qttClient.publish: ${JSON.stringify(data)}`);
+                
+                    data['event'] = event;
+                
+
+                mqttClient.publish(topic, JSON.stringify(data));
+                console.log("labels updated!");
+            } else {
+                console.log("labels not updated!");
+            }
+        });
+            }catch(e){
+                console.log(e);
+            }
 
     }
     console.log(mac);

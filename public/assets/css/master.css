@@ -942,7 +942,8 @@ HEADER AREA CSS
 }
 
 .logo {
-  max-width: 130px;
+  max-width: 60px;
+  
 }
 
 /*=====================
@@ -1053,7 +1054,8 @@ img.illas2 {
   }
 
   .title2 {
-    text-align: center;
+    text-align: right;
+    max-width: 1200px;
   }
   .title2 h1 {
     font-size: 40px;
@@ -1194,6 +1196,7 @@ FEATURE AREA CSS
 */
 .feature_area {
   position: relative;
+  display:flex;
   z-index: 2;
 }
 
@@ -1644,6 +1647,12 @@ APPS AREA CSS
     margin-top: 60px;
     float: right;
   }
+}
+
+.text_desc{
+  direction: rtl;
+  text-align: center;
+  max-width: 900px;
 }
 /*=====================
 COUNTER AREA CSS

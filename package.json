@@ -1,0 +1,27 @@
+{
+  "name": "node_gsm_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "melipayamak": "^1.0.5",
+    "mqtt": "^5.10.3",
+    "mysql2": "^3.11.5",
+    "node-cipher": "^6.3.3",
+    "path": "^0.12.7"
+  }
+}

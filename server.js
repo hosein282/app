@@ -24,7 +24,7 @@ const options = {
 
 // Middleware برای پردازش JSON
 app.use(express.json());
-app.use(express.static(path.join(__dirname,'site')));
+app.use(express.static(path.join(__dirname,'public')));
 mqttService.startMqtt();
 
 
@@ -46,7 +46,7 @@ app.use(errorHandler);
 // // یک روت ساده
 app.get('/', (req, res) => {
     console.log('Html request');
-    res.sendFile(path.join(__dirname,'site' ,'index2.html'));
+    res.sendFile(path.join(__dirname,'public' ,'index.html'));
 });
 
 
