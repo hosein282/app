@@ -20,7 +20,6 @@ async function startMqtt() {
         // Handler for incoming messages
         mqttClient.onMessage((topic, message) => {
             console.log(`Received message on topic ${topic}`);
-            console.log(`Message type: ${typeof message}`);
             console.log(`message[0]: ${message[0]}`);
             var data;
 
@@ -29,6 +28,7 @@ async function startMqtt() {
                     data = JSON.parse(message);
                 }
                 catch (e) {
+                    console.log("1231232132132321321321");
                     console.log(e);
                     return;
 
@@ -37,6 +37,8 @@ async function startMqtt() {
                 try {
                     data = base64ToObject(`"${message}"`);
                 } catch (e) {
+                    console.log("base646464646464646464");
+
                     console.log(e);
                     return;
                 }
@@ -88,10 +90,9 @@ function handleMqttReport(message) {
             ...(tims != null && { timers: tims }),
             ...(progs != null && { programs: progs }),
             ...(pwm != null && { pwm: pwm }),
-            ...({ status: "ONLINE" })
-
         };
         console.log(`data: ${JSON.stringify(data)}`);
+
 
         // const data = JSON.stringify(data);
         db.update('devices', data, { mac }).then((result) => {
@@ -116,6 +117,7 @@ function handleMqttReport(message) {
     } else if (event === 'feedback') {
 
         let data = prepareData(message);
+
         if (data['update'] === false) {
             const topic = "sub" + ">" + mac;
             mqttClient.publish(topic, JSON.stringify(message));
@@ -215,13 +217,14 @@ function handleMqttReport(message) {
 
 
 function prepareData(message) {
-    const { event, op, ain, temps, temp1, temp2, pwm, percent, sets, oSt, iSt, sig, update, tims, progs } = message;
-
+    const { event, op, ain, temps, pwm, percent, sets, oSt, iSt, sig, update, tims, progs,status } = message;
+//"temps":[26.75,-127,-127],"ain":[0,0],"op":"mci","sig":"20","mac":"D8:13:2A:7F:A2:28","event":"feedback","status":"ONLINE","sets":"10111","tims":"0123456/04/01:02,-,-,01234**/01/00:20,t20,t18","progs":"2:>:2.2:4:0,-,-,-","oSt":"010100","iSt":"00","pwm":"0,34"}
+// {"mac":"D8:13:2A:7F:A2:28","event":"feedback","oSt":"010100"}
+  try{
     var data = {
         ...(op != null && { operator: op }),
-        // ...(temp0 != null && { temp0: Number(temp0.toFixed(2)) }),
-        // ...(temp1 != null && { temp1: Number(temp1.toFixed(2)) }),
-        // ...(temp2 != null && { temp2: Number(temp2.toFixed(2)) }),
+        ...(ain != null && { analog: `${[Number(ain[0]) , Number(ain[1])]}` }),
+        ...(temps != null && { temps: `${[Number(temps[0].toFixed(2)) , Number(temps[1]).toFixed(2),Number(temps[2]).toFixed(2)]}` }),
         ...(sig != null && { signalQ: Number(sig) }),
         ...(sets != null && { setting: sets }),
         ...(oSt != null && { outStates: oSt }),
@@ -232,14 +235,15 @@ function prepareData(message) {
         ...(pwm != null && { pwm: pwm }),
         ...(update != null && { update: update }),
         ...(percent != null && { percent: percent }),
-        ...({ status: "ONLINE" }),
+        ...(status != null && { status: status }),
+        // ...({ status: "ONLINE" }),
 
 
 
     };
-    if (ain != null) {
-        data['analog'] = `${[Number(ain[0]), Number(ain[1])]}`;
-    }
+  }catch(e){
+    console.log(`prepare DATA ERROR ${e}`);
+  }
 
     console.log('prepareData');
     return data;
