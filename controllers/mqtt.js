@@ -225,6 +225,15 @@ function handleMqttReport(message) {
                 console.log(e);
             }
 
+    }else if(event === 'rfReg'){
+        handleMqttMessage(message);
+
+    }else if(event === 'admins'){
+        handleMqttMessage(message);
+
+    }
+    else {
+        return;
     }
     console.log(mac);
 }
@@ -264,7 +273,7 @@ function prepareData(message) {
 }
 function handleMqttMessage(message) {
 
-    const { mac, out, state, event, timer, value, label, url, version, result, pwm, percent } = message; // Destructure the body
+    const { mac, out, state, event, timer, value, label, url, version, result, pwm, percent ,key, phone,index} = message; // Destructure the body
     if (mac != "" && mac != undefined) {
         const topic = "action" + ">" + mac;
         const data = { 'mac': mac };
@@ -279,6 +288,9 @@ function handleMqttMessage(message) {
         if (percent !== undefined) data.percent = percent;
         if (url !== undefined) data.url = url;
         if (version !== undefined) data.version = version;
+        if (key !== undefined) data.key = key;
+        if (phone !== undefined) data.phone = phone;
+        if (index !== undefined) data.index = index;
         console.log(">>>>>>>>>>>>>>>>handle mqtt data");
         console.log(data);
 

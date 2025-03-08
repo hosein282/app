@@ -5,11 +5,16 @@ const pool = require('../config/database');
 pool.on('error', (err) => {
     console.error('تلاش برای برقراری مجدد:', err);
 
-        console.log('Connection is closed. Reconnecting...');
-        pool.end(); // بستن اتصال فعلی
-        pool.connect(); // تلاش برای برقراری مجدد اتصال
-    
-        
+    console.log('Connection is closed. Reconnecting...');
+    pool.connect((err) => {
+        if (err) {
+            console.error('Error connecting to MySQL:', err);
+            return;
+        }
+        console.log('Connected to MySQL database.');
+    });
+
+
     // در اینجا می‌توانید اقداماتی مانند تلاش برای برقراری مجدد اتصال انجام دهید
 });
 
@@ -34,7 +39,7 @@ const db = {
             throw err; // Rethrow the error to handle it upstream
         }
     },
-    
+
 
     // ایجاد عملیات CRUD
     create: async (table, data) => {
